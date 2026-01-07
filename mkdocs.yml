@@ -1,0 +1,155 @@
+site_name: Vibe-Kodning Manual
+site_description: Lär dig programmera genom konversation med Claude Code
+site_author: Peter
+
+# Använd content-mappen för källfiler
+docs_dir: docs
+
+theme:
+  name: material
+  language: sv
+  palette:
+    # Ljust läge
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: deep purple
+      toggle:
+        icon: material/brightness-7
+        name: Växla till mörkt läge
+    # Mörkt läge
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: deep purple
+      toggle:
+        icon: material/brightness-4
+        name: Växla till ljust läge
+
+  features:
+    - navigation.instant        # Snabb navigation utan sidladdning
+    - navigation.tracking       # URL uppdateras vid scroll
+    - navigation.tabs          # Huvudkategorier som flikar
+    - navigation.sections      # Grupperingar i sidomenyn
+    - navigation.expand        # Expandera navigering automatiskt
+    - navigation.top           # Tillbaka-till-toppen-knapp
+    - search.suggest           # Sökförslag
+    - search.highlight         # Markera sökresultat
+    - content.tabs.link        # Synka tabs över hela sidan
+    - content.code.copy        # Kopiera kod-knapp
+    - content.code.annotate    # Kodannoteringar
+
+  icon:
+    repo: fontawesome/brands/github
+
+# Plugins
+plugins:
+  - search:
+      lang: sv
+
+# Markdown-extensions för avancerade funktioner
+markdown_extensions:
+  # Attribut och HTML i markdown (för grid cards)
+  - attr_list
+  - md_in_html
+
+  # Tabs för OS-switchar och nivåer
+  - pymdownx.tabbed:
+      alternate_style: true
+
+  # Kodblock med syntax highlighting
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+
+  # Admonitions (info-rutor, varningar etc)
+  - admonition
+  - pymdownx.details
+
+  # Innehållsförteckning
+  - toc:
+      permalink: true
+      title: På denna sida
+
+  # Listor och checkboxar
+  - def_list
+  - pymdownx.tasklist:
+      custom_checkbox: true
+
+  # Tangentbordstangenter
+  - pymdownx.keys
+
+  # Emojis
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+
+# Navigation
+nav:
+  - Start: index.md
+  - Introduktion:
+    - Vad är vibe-kodning?: 01-introduktion/vad-ar-vibe-kodning.md
+    - Varför Claude Code?: 01-introduktion/varfor-claude-code.md
+    - Vem är manualen för?: 01-introduktion/vem-ar-manualen-for.md
+  - Kom igång:
+    - Installation: 02-komma-igang/installation.md
+    - Första projektet: 02-komma-igang/forsta-projektet.md
+    - Grundläggande terminal: 02-komma-igang/grundlaggande-terminal.md
+  - Claude Code Grunder:
+    - Grundläggande kommandon: 03-claude-code-grunder/grundlaggande-kommandon.md
+    - Filhantering: 03-claude-code-grunder/filhantering.md
+    - Konversationsteknik: 03-claude-code-grunder/konversationsteknik.md
+  - Git & Versionshantering:
+    - Vad är Git?: 04-git/vad-ar-git.md
+    - Grundläggande Git: 04-git/grundlaggande-git.md
+    - GitHub: 04-git/github.md
+    - Backup till NAS: 04-git/backup-nas.md
+  - Domäner:
+    - Home Assistant:
+      - Introduktion: 05-domaner/home-assistant/introduktion.md
+      - Arbetsflöde: 05-domaner/home-assistant/arbetsflode.md
+      - Automationer: 05-domaner/home-assistant/automationer.md
+      - Best Practices: 05-domaner/home-assistant/best-practices.md
+    - Power BI:
+      - Introduktion: 05-domaner/power-bi/introduktion.md
+      - Arbetsflöde: 05-domaner/power-bi/arbetsflode.md
+      - DAX med Claude: 05-domaner/power-bi/dax-med-claude.md
+      - Best Practices: 05-domaner/power-bi/best-practices.md
+    - Excel & Power Query:
+      - Introduktion: 05-domaner/excel/introduktion.md
+      - Arbetsflöde: 05-domaner/excel/arbetsflode.md
+      - Power Query: 05-domaner/excel/power-query.md
+      - Best Practices: 05-domaner/excel/best-practices.md
+    - Webbappar:
+      - Introduktion: 05-domaner/webbappar/introduktion.md
+      - Best Practices: 05-domaner/webbappar/best-practices.md
+  - Avancerat:
+    - Effektiva prompts: 06-avancerat/effektiva-prompts.md
+    - Felsökning: 06-avancerat/felsökning.md
+    - CLAUDE.md filer: 06-avancerat/claude-md-filer.md
+  - Referens:
+    - Kommandoöversikt: 07-referens/kommandooversikt.md
+    - Vanliga problem: 07-referens/vanliga-problem.md
+    - Ordlista: 07-referens/ordlista.md
+
+# Extra CSS för nivåsystemet
+extra_css:
+  - stylesheets/extra.css
+
+# Extra JavaScript
+extra_javascript:
+  - javascripts/level-switcher.js
+  - https://unpkg.com/mermaid@10/dist/mermaid.min.js
+
+# Sidfot med copyright och credits
+copyright: >
+  Projektstruktur baserad på
+  <a href="https://github.com/fltman/project-scaffolder">project-scaffolder</a>
+  av Anders Bjarby (CC-BY)

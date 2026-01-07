@@ -1,0 +1,97 @@
+/* Extra styling för Vibe-Kodning Manual */
+
+/* Förbättrad kodblock-styling */
+.md-typeset pre {
+  border-radius: 8px;
+}
+
+/* Prompt-exempel styling */
+.prompt-example {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 16px 20px;
+  border-radius: 8px;
+  margin: 16px 0;
+  font-family: inherit;
+}
+
+.prompt-example::before {
+  content: "Din prompt:";
+  display: block;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  opacity: 0.8;
+  margin-bottom: 8px;
+}
+
+/* Claude-svar styling */
+.claude-response {
+  background: var(--md-code-bg-color);
+  border-left: 4px solid #667eea;
+  padding: 16px;
+  margin: 16px 0;
+  border-radius: 0 8px 8px 0;
+}
+
+.claude-response::before {
+  content: "Claude Code svarar:";
+  display: block;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: var(--md-default-fg-color--light);
+  margin-bottom: 8px;
+}
+
+/* Tangentbordsgenvägar */
+.keyboard-shortcut {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.keyboard-shortcut kbd {
+  min-width: auto;
+}
+
+/* Varningsrutor för vanliga misstag */
+.admonition.warning,
+.admonition.danger {
+  border-left-width: 4px;
+}
+
+/* Tips för nybörjare */
+.admonition.tip {
+  border-left-width: 4px;
+}
+
+/* Terminal-styling */
+.terminal-window {
+  background: #1e1e1e;
+  border-radius: 8px;
+  overflow: hidden;
+  margin: 16px 0;
+}
+
+.terminal-header {
+  background: #3c3c3c;
+  padding: 8px 12px;
+  display: flex;
+  gap: 8px;
+}
+
+.terminal-button {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.terminal-button.close { background: #ff5f56; }
+.terminal-button.minimize { background: #ffbd2e; }
+.terminal-button.maximize { background: #27c93f; }
+
+.terminal-content {
+  padding: 16px;
+  color: #d4d4d4;
+  font-family: 'Consolas', 'Monaco', monospace;
+  font-size: 0.9rem;
+}

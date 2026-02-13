@@ -25,3 +25,7 @@ node_modules/
 # Local settings
 .env
 .env.local
+
+# Claude Code development files
+CLAUDE.md
+.claude/

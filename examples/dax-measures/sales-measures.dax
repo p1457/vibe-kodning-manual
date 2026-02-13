@@ -1,0 +1,178 @@
+// =============================================================================
+// DAX MEASURES FÖR FÖRSÄLJNINGSANALYS
+// =============================================================================
+// Kopiera dessa measures till Power BI för att använda dem.
+// Be Claude förklara eller modifiera efter behov.
+
+// -----------------------------------------------------------------------------
+// GRUNDLÄGGANDE MEASURES
+// -----------------------------------------------------------------------------
+
+// Total försäljning
+Total Försäljning =
+SUM('Försäljning'[Belopp])
+
+// Antal order
+Antal Order =
+COUNTROWS('Försäljning')
+
+// Genomsnittligt ordervärde
+Snitt Ordervärde =
+DIVIDE(
+    [Total Försäljning],
+    [Antal Order],
+    0
+)
+
+// Antal unika kunder
+Unika Kunder =
+DISTINCTCOUNT('Försäljning'[KundID])
+
+// -----------------------------------------------------------------------------
+// TIDSINTELLIGENS
+// -----------------------------------------------------------------------------
+
+// Försäljning samma period förra året
+Försäljning FÅ =
+CALCULATE(
+    [Total Försäljning],
+    SAMEPERIODLASTYEAR('Datum'[Datum])
+)
+
+// Förändring mot förra året (%)
+YoY % =
+VAR FörrÅr = [Försäljning FÅ]
+VAR DettaÅr = [Total Försäljning]
+RETURN
+DIVIDE(
+    DettaÅr - FörrÅr,
+    FörrÅr,
+    BLANK()
+)
+
+// Ackumulerat hittills i år (YTD)
+Försäljning YTD =
+CALCULATE(
+    [Total Försäljning],
+    DATESYTD('Datum'[Datum])
+)
+
+// Rullande 12 månader
+Försäljning R12 =
+CALCULATE(
+    [Total Försäljning],
+    DATESINPERIOD(
+        'Datum'[Datum],
+        MAX('Datum'[Datum]),
+        -12,
+        MONTH
+    )
+)
+
+// Föregående månad
+Försäljning FM =
+CALCULATE(
+    [Total Försäljning],
+    PREVIOUSMONTH('Datum'[Datum])
+)
+
+// Förändring mot föregående månad (%)
+MoM % =
+VAR FörraMånad = [Försäljning FM]
+VAR DennaMånad = [Total Försäljning]
+RETURN
+DIVIDE(
+    DennaMånad - FörraMånad,
+    FörraMånad,
+    BLANK()
+)
+
+// -----------------------------------------------------------------------------
+// RANKING OCH PARETO
+// -----------------------------------------------------------------------------
+
+// Rank produkter efter försäljning
+Produkt Rank =
+RANKX(
+    ALL('Produkt'[Produktnamn]),
+    [Total Försäljning],
+    ,
+    DESC,
+    DENSE
+)
+
+// Ackumulerad försäljningsandel (för Pareto)
+Kumulativ Andel =
+VAR NuvarandeVärde = [Total Försäljning]
+VAR TotalVärde = CALCULATE(
+    [Total Försäljning],
+    ALL('Produkt')
+)
+VAR KumulativtVärde =
+    SUMX(
+        FILTER(
+            ALL('Produkt'),
+            [Total Försäljning] >= NuvarandeVärde
+        ),
+        [Total Försäljning]
+    )
+RETURN
+DIVIDE(KumulativtVärde, TotalVärde)
+
+// -----------------------------------------------------------------------------
+// VILLKORLIGA MEASURES
+// -----------------------------------------------------------------------------
+
+// Försäljning endast för nya kunder (första köp senaste 90 dagarna)
+Försäljning Nya Kunder =
+VAR NyaKunder =
+    CALCULATETABLE(
+        VALUES('Kund'[KundID]),
+        FILTER(
+            ALL('Försäljning'),
+            'Försäljning'[Orderdatum] >= TODAY() - 90
+        )
+    )
+RETURN
+CALCULATE(
+    [Total Försäljning],
+    'Kund'[KundID] IN NyaKunder
+)
+
+// Försäljning med dynamisk valuta-formatering
+Försäljning Formaterad =
+VAR Värde = [Total Försäljning]
+RETURN
+SWITCH(
+    TRUE(),
+    Värde >= 1000000, FORMAT(Värde / 1000000, "#,##0.0") & " Mkr",
+    Värde >= 1000, FORMAT(Värde / 1000, "#,##0") & " tkr",
+    FORMAT(Värde, "#,##0") & " kr"
+)
+
+// -----------------------------------------------------------------------------
+// KPI MED TRAFIKLJUS
+// -----------------------------------------------------------------------------
+
+// KPI-ikon baserat på måluppfyllelse
+KPI Ikon =
+VAR Utfall = [Total Försäljning]
+VAR Mål = [Försäljningsmål]  -- Referera till din mål-measure
+VAR Uppfyllelse = DIVIDE(Utfall, Mål, 0)
+RETURN
+SWITCH(
+    TRUE(),
+    Uppfyllelse >= 1.0, "🟢",      -- Över mål
+    Uppfyllelse >= 0.9, "🟡",      -- Nära mål (90%+)
+    "🔴"                            -- Under mål
+)
+
+
+// =============================================================================
+// TIPS FÖR CLAUDE CODE:
+// =============================================================================
+// Kopiera en measure och be Claude:
+// - "Förklara denna DAX-measure steg för steg"
+// - "Optimera denna measure för bättre prestanda"
+// - "Skapa en liknande measure för [annat mått]"
+// - "Lägg till felhantering för tomma värden"

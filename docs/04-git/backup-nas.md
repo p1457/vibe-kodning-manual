@@ -95,11 +95,18 @@ git push nas main
     Du kan pusha till båda ställen samtidigt genom att lägga till flera push-URL:er:
 
     ```bash
-    # Lägg till NAS som extra push-destination för origin
+    # Steg 1: Behåll GitHub som push-destination (VIKTIGT!)
+    git remote set-url --add --push origin https://github.com/user/repo.git
+
+    # Steg 2: Lägg till NAS som extra push-destination
     git remote set-url --add --push origin ssh://användare@nas-ip/path/repo.git
     ```
 
     Nu pushar `git push origin main` till *både* GitHub och NAS!
+
+    !!! warning "Viktigt"
+        Du måste först lägga till den befintliga GitHub-URL:en som push-URL,
+        annars ersätts den av NAS-URL:en.
 
 === "Standard"
 

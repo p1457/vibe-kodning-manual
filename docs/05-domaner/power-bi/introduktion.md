@@ -72,9 +72,15 @@ RETURN
     CALCULATE(
         SUM('Sales'[Amount]),
         SAMEPERIODLASTYEAR('Date'[Date]),
-        KEEPFILTERS(CommonProducts)
+        CommonProducts  -- Tabellen filtrerar automatiskt
     )
 ```
+
+!!! info "Förklaring"
+    - `VALUES()` hämtar unika produkter i aktuell filterkontext
+    - `CALCULATETABLE()` hämtar produkter som fanns förra året
+    - `INTERSECT()` hittar produkter som finns i båda perioderna
+    - Tabellen `CommonProducts` används som filter i CALCULATE
 
 ---
 

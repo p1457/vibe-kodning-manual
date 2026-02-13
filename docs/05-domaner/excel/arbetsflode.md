@@ -92,6 +92,26 @@ Kolumn B innehåller belopp (1500, 2300 etc)
 Vad är fel?
 ```
 
+**Claude Code svarar:**
+
+Problemet är att datumjämförelser i SUMIFS kräver korrekt datumformat.
+Textsträngen `">2024-01-01"` tolkas inte som ett datum.
+
+**Lösningar:**
+
+```excel
+# Lösning 1: Använd DATE-funktionen
+=SUMIFS(B:B,A:A,">"&DATE(2024,1,1))
+
+# Lösning 2: Använd DATEVALUE
+=SUMIFS(B:B,A:A,">"&DATEVALUE("2024-01-01"))
+
+# Lösning 3: Referera till en cell med datum
+=SUMIFS(B:B,A:A,">"&E1)
+```
+
+Operatorn (`>`) måste konkateneras med datumvärdet med `&`.
+
 ### Moderna formler (Microsoft 365)
 
 ```

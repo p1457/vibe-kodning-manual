@@ -98,10 +98,11 @@ till 50% ljusstyrka när TV:n slås på, men bara efter kl 18.
 automation:
   - alias: "Dimma vardagsrum vid TV-tittande"
     description: "Tänder vardagsrumslamporna när TV:n slås på kvällstid"
+    mode: single
     trigger:
       - platform: state
         entity_id: media_player.vardagsrums_tv
-        to: "on"
+        to: "playing"  # Media players använder "playing", inte "on"
     condition:
       - condition: time
         after: "18:00:00"
@@ -112,6 +113,14 @@ automation:
         data:
           brightness_pct: 50
 ```
+
+!!! tip "Media player states"
+    Media players har andra states än vanliga enheter:
+
+    - `playing` - spelar media
+    - `paused` - pausad
+    - `idle` - påslagen men inaktiv
+    - `off` - avstängd
 
 ---
 

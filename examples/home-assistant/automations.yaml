@@ -1,0 +1,182 @@
+# Exempel på Home Assistant-automationer
+# Kopiera dessa till din automations.yaml eller använd som inspiration
+
+# =============================================================================
+# AUTOMATION 1: Tänd hall vid dörröppning efter solnedgång
+# =============================================================================
+- id: 'hall_light_door_open'
+  alias: "Tänd hall vid dörröppning"
+  description: "Tänder hallampan när ytterdörren öppnas efter solnedgång"
+  mode: single
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.ytterdorr
+      to: "on"
+  condition:
+    - condition: sun
+      after: sunset
+      after_offset: "-00:30:00"  # 30 min innan solnedgång
+  action:
+    - service: light.turn_on
+      target:
+        entity_id: light.hall
+      data:
+        brightness_pct: 80
+        transition: 2
+    # Släck automatiskt efter 5 minuter om ingen rörelse
+    - delay:
+        minutes: 5
+    - condition: state
+      entity_id: binary_sensor.hall_motion
+      state: "off"
+      for:
+        minutes: 2
+    - service: light.turn_off
+      target:
+        entity_id: light.hall
+
+# =============================================================================
+# AUTOMATION 2: Morgonrutin - gradvis uppvakning
+# =============================================================================
+- id: 'morning_routine'
+  alias: "Morgonrutin vardagar"
+  description: "Gradvis tänd lampor och starta kaffe på vardagar"
+  mode: single
+  trigger:
+    - platform: time
+      at: "06:30:00"
+  condition:
+    - condition: time
+      weekday:
+        - mon
+        - tue
+        - wed
+        - thu
+        - fri
+    - condition: state
+      entity_id: input_boolean.vacation_mode
+      state: "off"
+  action:
+    # Steg 1: Svagt ljus i sovrummet
+    - service: light.turn_on
+      target:
+        entity_id: light.sovrum
+      data:
+        brightness_pct: 10
+        color_temp: 500  # Varmt ljus
+    - delay:
+        minutes: 5
+    # Steg 2: Öka ljus och starta kaffebryggaren
+    - service: light.turn_on
+      target:
+        entity_id: light.sovrum
+      data:
+        brightness_pct: 50
+        color_temp: 400
+        transition: 300  # 5 minuters övergång
+    - service: switch.turn_on
+      target:
+        entity_id: switch.kaffemaskin
+    # Steg 3: Fullt ljus
+    - delay:
+        minutes: 10
+    - service: light.turn_on
+      target:
+        entity_id: light.sovrum
+      data:
+        brightness_pct: 100
+        color_temp: 300  # Kallare ljus
+        transition: 120
+
+# =============================================================================
+# AUTOMATION 3: Notifikation när tvättmaskinen är klar
+# =============================================================================
+- id: 'washing_machine_done'
+  alias: "Tvättmaskin klar"
+  description: "Skicka notis när tvättmaskinen slutat dra ström"
+  mode: single
+  trigger:
+    - platform: numeric_state
+      entity_id: sensor.tvattmaskin_power
+      below: 5
+      for:
+        minutes: 2
+  condition:
+    # Endast om den nyligen dragit mycket ström (dvs körde)
+    - condition: template
+      value_template: >
+        {{ states('sensor.tvattmaskin_power') | float < 5 and
+           state_attr('sensor.tvattmaskin_power', 'last_above_threshold') is not none }}
+  action:
+    - service: notify.mobile_app_min_telefon
+      data:
+        title: "Tvätten är klar! 👕"
+        message: "Dags att hänga upp tvätten"
+        data:
+          tag: "washing"
+          actions:
+            - action: "SNOOZE"
+              title: "Påminn om 30 min"
+
+# =============================================================================
+# AUTOMATION 4: Filmläge - dimma lampor när media spelas
+# =============================================================================
+- id: 'movie_mode'
+  alias: "Filmläge i vardagsrummet"
+  description: "Dimmar lamporna när film startar på TV:n"
+  mode: restart
+  trigger:
+    - platform: state
+      entity_id: media_player.vardagsrum_tv
+      to: "playing"
+  condition:
+    - condition: time
+      after: "18:00:00"
+      before: "23:59:59"
+  action:
+    - service: light.turn_on
+      target:
+        entity_id: light.vardagsrum
+      data:
+        brightness_pct: 15
+        transition: 3
+    # Vänta tills media pausas eller stoppas
+    - wait_for_trigger:
+        - platform: state
+          entity_id: media_player.vardagsrum_tv
+          to:
+            - "paused"
+            - "idle"
+            - "off"
+      timeout:
+        hours: 4
+    # Återställ ljus
+    - service: light.turn_on
+      target:
+        entity_id: light.vardagsrum
+      data:
+        brightness_pct: 70
+        transition: 2
+
+# =============================================================================
+# AUTOMATION 5: Automatisk låsning på natten
+# =============================================================================
+- id: 'night_lock'
+  alias: "Lås dörren på natten"
+  description: "Låser ytterdörren kl 23:00 om den är olåst"
+  mode: single
+  trigger:
+    - platform: time
+      at: "23:00:00"
+  condition:
+    - condition: state
+      entity_id: lock.ytterdorr
+      state: "unlocked"
+  action:
+    - service: lock.lock
+      target:
+        entity_id: lock.ytterdorr
+    - service: notify.mobile_app_min_telefon
+      data:
+        title: "Dörren låst 🔒"
+        message: "Ytterdörren har låsts automatiskt"

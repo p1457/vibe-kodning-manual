@@ -99,16 +99,21 @@ nav:
     - Varför Claude Code?: 01-introduktion/varfor-claude-code.md
     - Vem är manualen för?: 01-introduktion/vem-ar-manualen-for.md
   - Kom igång:
+    - Kostnad och priser: 02-komma-igang/kostnad.md
     - Installation: 02-komma-igang/installation.md
     - Första projektet: 02-komma-igang/forsta-projektet.md
     - Grundläggande terminal: 02-komma-igang/grundlaggande-terminal.md
   - Claude Code Grunder:
     - Grundläggande kommandon: 03-claude-code-grunder/grundlaggande-kommandon.md
+    - Filreferenser med @: 03-claude-code-grunder/filreferenser.md
+    - Sessioner och kontext: 03-claude-code-grunder/sessioner-och-kontext.md
+    - Permissions: 03-claude-code-grunder/permissions.md
     - Filhantering: 03-claude-code-grunder/filhantering.md
     - Konversationsteknik: 03-claude-code-grunder/konversationsteknik.md
   - Git & Versionshantering:
     - Vad är Git?: 04-git/vad-ar-git.md
     - Grundläggande Git: 04-git/grundlaggande-git.md
+    - .gitignore: 04-git/gitignore.md
     - GitHub: 04-git/github.md
     - Backup till NAS: 04-git/backup-nas.md
   - Domäner:
@@ -129,9 +134,13 @@ nav:
       - Best Practices: 05-domaner/excel/best-practices.md
     - Webbappar:
       - Introduktion: 05-domaner/webbappar/introduktion.md
+      - Arbetsflöde: 05-domaner/webbappar/arbetsflode.md
       - Best Practices: 05-domaner/webbappar/best-practices.md
   - Avancerat:
     - Effektiva prompts: 06-avancerat/effektiva-prompts.md
+    - Subagenter: 06-avancerat/subagenter.md
+    - Hooks: 06-avancerat/hooks.md
+    - MCP-servrar: 06-avancerat/mcp-servrar.md
     - Felsökning: 06-avancerat/felsökning.md
     - CLAUDE.md filer: 06-avancerat/claude-md-filer.md
   - Referens:

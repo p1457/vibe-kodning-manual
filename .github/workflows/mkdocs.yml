@@ -28,7 +28,7 @@ jobs:
         run: mkdocs build
 
       - name: Upload artifact for Pages
-        uses: actions/upload-pages-artifact@v1
+        uses: actions/upload-pages-artifact@v4
         with:
           path: site   # detta är mappen MkDocs bygger till
 

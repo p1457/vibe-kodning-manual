@@ -3,7 +3,7 @@ name: Build and Deploy MkDocs
 on:
   push:
     branches:
-      - master   # ändra till main om din branch heter det
+      - master  # ändra till main om din branch heter så
 
 permissions:
   contents: read
@@ -11,7 +11,7 @@ permissions:
   id-token: write
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -27,13 +27,8 @@ jobs:
       - name: Build site
         run: mkdocs build
 
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v1
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
         with:
-          path: site
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/deploy-pages@v4
+          # artifact path från MkDocs build
+          artifact_name: site

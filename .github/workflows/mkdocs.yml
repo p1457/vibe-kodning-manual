@@ -3,7 +3,7 @@ name: Build and Deploy MkDocs to GitHub Pages
 on:
   push:
     branches:
-      - master
+      - master  # eller main beroende på ditt repo
 
 permissions:
   contents: read
@@ -27,9 +27,18 @@ jobs:
           pip install pymdown-extensions
 
       - name: Build site
-        run: mkdocs build --verbose
+        run: mkdocs build
 
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: site  # byggmappen MkDocs genererar
+          
+  deploy:
+    needs: build-and-deploy
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+    steps:
       - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v4
-        with:
-          artifact-path: site

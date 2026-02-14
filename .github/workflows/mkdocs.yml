@@ -27,8 +27,10 @@ jobs:
       - name: Build site
         run: mkdocs build
 
+      - name: Upload artifact for Pages
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: site   # detta är mappen MkDocs bygger till
+
       - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v4
-        with:
-          # artifact path från MkDocs build
-          artifact_name: site
